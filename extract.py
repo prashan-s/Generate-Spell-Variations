@@ -1,7 +1,7 @@
 import csv
 
 # Define input CSV file
-input_csv = "./variations.csv"
+input_csv = ".variations.csv"
 
 # Initialize dictionaries
 meanings_id_for_variations = {}
@@ -41,23 +41,46 @@ with open(input_csv, encoding="utf-8") as file:
 # Output the generated mappings to a text file
 output_ios_file = "./Output/processed-variation-ios.txt"
 output_android_file = "./Output/processed-variation-android.txt"
+columns = 1
+c_increment = 1
+i_increment = 1
+put_new_line = "\n" if c_increment == 0 else " "
 
 with open(output_ios_file, "w", encoding="utf-8") as file:
     file.write("let meaningsIdForVariations: [String: UInt16] = [\n")
     for key, value in meanings_id_for_variations.items():
-        file.write(f'    "{key}": {value},\n')
-    file.write("]\n\n")
+        c_increment = i_increment % columns
+        i_increment += 1
+        put_new_line = "\n" if c_increment == 0 else ""
+
+        file.write(f'"{key}": {value},{put_new_line}')
+        
+    file.write("\n]\n\n")
+    c_increment = 1
+    i_increment = 1
 
     file.write("let meaningsForVariations: [UInt16: String] = [\n")
     for key, value in meanings_for_variations.items():
-        file.write(f'    {key}: "{value}",\n')
-    file.write("]\n\n")
+        c_increment = i_increment % columns
+        i_increment += 1
+        put_new_line = "\n" if c_increment == 0 else ""
+
+        file.write(f'{key}: "{value}",{put_new_line}')
+        
+    file.write("\n]\n\n")
+    c_increment = 1
+    i_increment = 1
 
     file.write("let similarWordMapping: [UInt16: [Int]] = [\n")
     for key, value in similar_word_mapping.items():
-        file.write(f'    {key}: {value},\n')
-    file.write("]\n")
+        c_increment = i_increment % columns
+        i_increment += 1
+        put_new_line = "\n" if c_increment == 0 else " "
 
+        file.write(f'{key}: {value},{put_new_line}')
+    file.write("\n]\n")
+    c_increment = 1
+    i_increment = 1
 
 
 with open(output_android_file, "w", encoding="utf-8") as file:
